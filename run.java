@@ -15,53 +15,49 @@ import java.util.concurrent.*;
 
 public class run{
     public static void main(String[] args) throws Exception{
-        double K1 = -1.1623; //hell 
-        double K2 = -5.0075; //hell 
-        double K3 = 55.3019; //hell 
-        double K4 = 9.1142;  //hell 
-        double dt = 0.001;
-
-        environment env = new environment("");env.reset((float)0.5);
-        control ctrl = new control(env.M, env.m, env.L, K1, K2, K3 ,K4);
-        env.reset(0.2f);
-        
-        
-        float[] base_mesh = MeshLoader.loadMesh("mesh.bin");
+        MeshLoader M = new MeshLoader();
+        float[] base_mesh = MeshLoader.loadMesh("mesh_model_217k.bin"); //M.load_default_mesh(2.0f);//
+        int[] uv = M.load_default_uv();
+        int[][] texture = M.load_default_texture();
         //float[] icosahedron = {0.0f , 0.0f , -0.6399999856948853f , 0.4631039798259735f , -0.33646076917648315f , -0.286217600107193f , -0.1768863946199417f , -0.5444096326828003f , -0.286217600107193f , 0.4631039798259735f , -0.33646076917648315f , -0.286217600107193f , 0.0f , 0.0f , -0.6399999856948853f , 0.4631039798259735f , 0.33646076917648315f , -0.286217600107193f , 0.0f , 0.0f , -0.6399999856948853f , -0.1768863946199417f , -0.5444096326828003f , -0.286217600107193f , -0.5724319815635681f , 0.0f , -0.286217600107193f , 0.0f , 0.0f , -0.6399999856948853f , -0.5724319815635681f , 0.0f , -0.286217600107193f , -0.1768863946199417f , 0.5444096326828003f , -0.286217600107193f , 0.0f , 0.0f , -0.6399999856948853f , -0.1768863946199417f , 0.5444096326828003f , -0.286217600107193f , 0.4631039798259735f , 0.33646076917648315f , -0.286217600107193f , 0.4631039798259735f , -0.33646076917648315f , -0.286217600107193f , 0.4631039798259735f , 0.33646076917648315f , -0.286217600107193f , 0.5724319815635681f , 0.0f , 0.286217600107193f , -0.1768863946199417f , -0.5444096326828003f , -0.286217600107193f , 0.4631039798259735f , -0.33646076917648315f , -0.286217600107193f , 0.1768863946199417f , -0.5444096326828003f , 0.286217600107193f , -0.5724319815635681f , 0.0f , -0.286217600107193f , -0.1768863946199417f , -0.5444096326828003f , -0.286217600107193f , -0.4631039798259735f , -0.33646076917648315f , 0.286217600107193f , -0.1768863946199417f , 0.5444096326828003f , -0.286217600107193f , -0.5724319815635681f , 0.0f , -0.286217600107193f , -0.4631039798259735f , 0.33646076917648315f , 0.286217600107193f , 0.4631039798259735f , 0.33646076917648315f , -0.286217600107193f , -0.1768863946199417f , 0.5444096326828003f , -0.286217600107193f , 0.1768863946199417f , 0.5444096326828003f , 0.286217600107193f , 0.4631039798259735f , -0.33646076917648315f , -0.286217600107193f , 0.5724319815635681f , 0.0f , 0.286217600107193f , 0.1768863946199417f , -0.5444096326828003f , 0.286217600107193f , -0.1768863946199417f , -0.5444096326828003f , -0.286217600107193f , 0.1768863946199417f , -0.5444096326828003f , 0.286217600107193f , -0.4631039798259735f , -0.33646076917648315f , 0.286217600107193f , -0.5724319815635681f , 0.0f , -0.286217600107193f , -0.4631039798259735f , -0.33646076917648315f , 0.286217600107193f , -0.4631039798259735f , 0.33646076917648315f , 0.286217600107193f , -0.1768863946199417f , 0.5444096326828003f , -0.286217600107193f , -0.4631039798259735f , 0.33646076917648315f , 0.286217600107193f , 0.1768863946199417f , 0.5444096326828003f , 0.286217600107193f , 0.4631039798259735f , 0.33646076917648315f , -0.286217600107193f , 0.1768863946199417f , 0.5444096326828003f , 0.286217600107193f , 0.5724319815635681f , 0.0f , 0.286217600107193f , 0.1768863946199417f , -0.5444096326828003f , 0.286217600107193f , 0.5724319815635681f , 0.0f , 0.286217600107193f , 0.0f , 0.0f , 0.6399999856948853f , -0.4631039798259735f , -0.33646076917648315f , 0.286217600107193f , 0.1768863946199417f , -0.5444096326828003f , 0.286217600107193f , 0.0f , 0.0f , 0.6399999856948853f , -0.4631039798259735f , 0.33646076917648315f , 0.286217600107193f , -0.4631039798259735f , -0.33646076917648315f , 0.286217600107193f , 0.0f , 0.0f , 0.6399999856948853f , 0.1768863946199417f , 0.5444096326828003f , 0.286217600107193f , -0.4631039798259735f , 0.33646076917648315f , 0.286217600107193f , 0.0f , 0.0f , 0.6399999856948853f , 0.5724319815635681f , 0.0f , 0.286217600107193f , 0.1768863946199417f , 0.5444096326828003f , 0.286217600107193f , 0.0f , 0.0f , 0.6399999856948853f};
-        int[] color = new int[base_mesh.length/9];
-        for(int i = 0 ; i < base_mesh.length/9 ; i++){
-            color[i] = 0xFFFFFFFF;//(int)(Math.random()*35514566);
-        }
+        //int[] color = MeshLoader.loadColors("color.bin");
         float fov = 90;
-        float zoom = 3;
-        int[] mesh_index = {0, 36*3, 72*3, 324};
+        float zoom = 5;
+        int[] mesh_index = {0, base_mesh.length};
 
-        render r = new render(mesh_index[mesh_index.length - 1], 1000, 1000, fov, zoom, -12f, 0.0f, 7f, 2.25f, 0.0f);
+        render r = new render(mesh_index[mesh_index.length - 1], 1000, 1000, fov, zoom, -12f, 0.0f, 7f, 2.25f, 0.0f, texture, 1);
         
         viewer v = new viewer(r.pixel_x, r.pixel_y, 1, "render");
-        v.env = env;
-        v.ctrl = ctrl;
+
+        float[][] mesh_state = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}; //px, py, pz, vx, vy, vz, omegax, omegay, omegaz, camvelomag
+        v.r = r;
         r.LX = -10f;
         r.LY = 10f;
+        float radius = 8;
         float[] basemesh_clone = base_mesh.clone();
+        r.camedit(fov,zoom, -2.1f*5f, 0.0f, 1.225f*5f, 2.17f, 2.087f, 0.0f);
         for (int f = 0;  ; f++) {
-            double force = ctrl.computeControl(env.x , env.xd, env.theta, env.thetad);
-            env.rk4(force, dt);
-            if(f % 50 == 0){
-                //env.printnn(f, force);
-            
+                float th = -0.785f, ph = -0.785f;
+                float px = 0;// (float)Math.sin(Math.toRadians(f))*radius;
+                float py = 0;// (float)Math.cos(Math.toRadians(f))*radius;
+                float vx = 0;// (float)Math.cos(Math.toRadians(f))*radius;
+                float vy = 0;//-(float)Math.sin(Math.toRadians(f))*radius;
+                float wdot = (float)Math.toRadians(1);
+                mesh_state[0] = new float[]{
+                    px, py, 0.15f,                          // center (the displacement)S
+                    vx, vy, 0,                              // linear velocity
+                    wdot*(float)(Math.sin(th)*Math.cos(ph)),
+                    wdot*(float)(Math.sin(th)*Math.sin(ph)),
+                    wdot*(float)Math.cos(th),
+                    0 };
                 basemesh_clone = base_mesh.clone();
-                r.editmesh(base_mesh, basemesh_clone,mesh_index[0], mesh_index[1], (float)env.theta, -1.5707963268f, 1.5707963268f, 0, 0, 0);
-                r.editmesh(basemesh_clone, basemesh_clone,mesh_index[0], mesh_index[2], 0, 0, 0, (float)env.x, 0, 0);
-                r.editmesh(basemesh_clone, basemesh_clone,mesh_index[0], mesh_index[3], (float)Math.toRadians(80), 0, 0, 0, 0, 0);
-                r.camedit(fov,4, -2.1f*5f, 0.0f, 1.225f*5f, 2.17f, 2.087f, 0.0f);
-                r.project(basemesh_clone, color);
-                v.show(r.image);
-                try { Thread.sleep(20); } catch (InterruptedException e) {}
-            }
+                r.editmesh(basemesh_clone, basemesh_clone,mesh_index[0], mesh_index[1], (float)Math.toRadians(f), -0.785f, -0.785f, px, py, 0.15f);
+                
+                
+                
+                v.show(r.project(basemesh_clone, uv ,mesh_state));
         }
     }
-    
 }
 
 class render extends Thread{
@@ -72,6 +68,8 @@ class render extends Thread{
     float[] zbuffer; // distance from the camera to the triangle which is being rasterised : its defined for each pixel used for shading as well
     float scaling = pixel_y/2; // used for converting ndc plane points into screen pixel points
     float[] data; //its the data that rasterizer uses to create the zbuffer
+    boolean[] tri_isvisible;
+    float[][] normalized_state;
     float alpha; // distance from a particular and camera point used for dolly zoom
     float zoom; // zooming factor, liner multipication to make a object appear closer
     int[] image; //rgb value of screen stored in a 1d int array
@@ -82,6 +80,13 @@ class render extends Thread{
     int[] chunk_pixel_index = {0, 250, 500, 750, 1000}; // unused
     float[] triangle; //saves the triangle data after normalization of 3d world
     float polar_angle; float azimuthal_angle; // camera pointing angles
+    int runx;
+    int runy;
+    int fontbitx = 8;
+    int fontbity = 16;
+    int monospace_resolution = fontbitx*fontbity;
+    int[] processed_image;
+    int brightness = 128;
 
     multithreadrender mtr; // multithreader object
 
@@ -89,15 +94,19 @@ class render extends Thread{
 
     int[][] tri_chunk_index; //it stored index of triangle for each tile
 
-    public render(int pointcount , int resox, int resoy, float fov, float zoom, float cam_x, float cam_y ,float cam_z, float polar_angle,float azimuthal_angle){
+    boolean ASCIIeffect = false;
+
+    public render(int pointcount , int resox, int resoy, float fov, float zoom, float cam_x, float cam_y ,float cam_z, float polar_angle,float azimuthal_angle, int[][] texture, int mesh_count){
         tri_count = pointcount/9;
         triangle = new float[pointcount];
         pixel_x = resox;
         pixel_y = resoy;
         triangle_index = new int[resox * resoy];
+        normalized_state = new float[mesh_count][10];
         image = new int[resox * resoy];
         zbuffer = new float[resox*resoy];
         data = new float[tri_count*24];
+        tri_isvisible = new boolean[tri_count];
         scaling = (resoy/2);
         alpha = (float)(1/(Math.tan(Math.toRadians(fov/2))));
         this.zoom = zoom;
@@ -109,8 +118,78 @@ class render extends Thread{
         this.polar_angle = polar_angle;
         tri_chunk_index = new int[16][tri_count];
         System.out.println(view_fac);
-        mtr = new multithreadrender(this, pixel_x, pixel_y);
+        mtr = new multithreadrender(this, pixel_x, pixel_y, texture);
+        processed_image = new int[pixel_x*pixel_y];
+        runx = resox / (fontbitx);
+        runy = resoy / (fontbity);
     }
+    static final boolean[][][] FONT_BOOL = {
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '.' code 46, 2/128 px
+        {{false, false, false, true, false, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '`' code 96, 2/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // ',' code 44, 3/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // ':' code 58, 4/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, false, true, false, false, false}, {false, true, false, false, false, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '^' code 94, 5/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '"' code 34, 6/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, true, true, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '_' code 95, 6/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '!' code 33, 9/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '<' code 60, 9/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '>' code 62, 9/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '(' code 40, 10/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // ')' code 41, 10/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'backslash' code 92, 10/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '|' code 124, 10/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, true, true, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'i' code 105, 12/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, true, true, true, true, false}, {false, true, true, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'r' code 114, 12/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, false, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, true, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '}' code 125, 12/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, true, true, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'l' code 108, 13/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, true, true, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'I' code 73, 14/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, true, true, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '[' code 91, 14/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, false, false, true, true, false, false, false}, {false, false, false, true, true, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'v' code 118, 14/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, false, false, true, false, false}, {false, false, false, true, true, false, false, false}, {false, false, true, false, false, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'x' code 120, 14/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, true, true, true, true, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '7' code 55, 15/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, true, true, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'L' code 76, 15/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {true, false, false, false, false, false, true, false}, {true, false, false, false, false, false, true, false}, {false, true, false, false, false, true, false, false}, {false, true, false, false, false, true, false, false}, {false, false, true, false, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'Y' code 89, 15/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, true, true, false, false, false}, {false, false, true, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, true, true, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '1' code 49, 16/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, true, true, true, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, false, true, false, false}, {false, true, false, false, false, true, false, false}, {false, true, false, false, false, true, false, false}, {false, false, true, true, true, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'J' code 74, 16/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, true, true, true, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, true, true, true, true, true, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'f' code 102, 16/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, true, true, true, true, true, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 't' code 116, 16/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'n' code 110, 17/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'u' code 117, 17/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, true, true, true, true, true, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, true, true, true, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'F' code 70, 18/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, true, false, false}, {false, true, false, false, true, false, false, false}, {false, true, true, true, false, false, false, false}, {false, true, false, false, true, false, false, false}, {false, true, false, false, false, true, false, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'k' code 107, 18/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, true, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, true, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 's' code 115, 18/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, true, true, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '2' code 50, 20/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'C' code 67, 20/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, true, false, false}, {false, true, false, false, true, false, false, false}, {false, true, false, true, false, false, false, false}, {false, true, true, false, false, false, false, false}, {false, true, true, false, false, false, false, false}, {false, true, false, true, false, false, false, false}, {false, true, false, false, true, false, false, false}, {false, true, false, false, false, true, false, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'K' code 75, 20/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, false, false, true, true, false, false, false}, {false, false, false, true, true, false, false, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'X' code 88, 20/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, true, true, true, true, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, true, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, true, true, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'Z' code 90, 20/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'h' code 104, 20/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, true, false}, {false, false, true, true, true, true, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'a' code 97, 21/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, true, false, false, true, false, false}, {true, false, false, true, false, true, false, false}, {false, true, true, false, true, false, false, false}, {false, false, false, false, true, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, true, false, false, false, false, false}, {false, false, true, false, true, true, false, false}, {false, true, false, true, false, false, true, false}, {false, true, false, false, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '%' code 37, 22/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, true, true, true, false, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '3' code 51, 22/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, true, true, true, true, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'P' code 80, 22/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'U' code 85, 22/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, true, false, false, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, false, false, true, true, false, false, false}, {false, false, true, true, false, false, false, false}, {false, true, false, false, true, false, true, false}, {false, true, false, false, false, true, false, false}, {false, true, false, false, false, true, false, false}, {false, true, false, false, false, true, false, false}, {false, false, true, true, true, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '&' code 38, 23/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, true, true, true, false, false}, {false, false, true, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '6' code 54, 23/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, true, false, false}, {false, false, true, true, true, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '9' code 57, 23/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'b' code 98, 23/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, true, true, true, true, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'd' code 100, 23/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}}, // 'q' code 113, 23/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, true, false}, {false, false, false, false, false, false, true, false}, {false, false, false, false, false, false, true, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}}, // 'y' code 121, 23/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, false, false, false, false}, {false, true, false, false, true, true, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'G' code 71, 24/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, true, true, true, true, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'H' code 72, 24/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'O' code 79, 24/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {true, true, true, true, true, true, false, false}, {true, false, false, true, false, false, true, false}, {true, false, false, true, false, false, true, false}, {true, false, false, true, false, false, true, false}, {true, false, false, true, false, false, true, false}, {true, false, false, true, false, false, true, false}, {true, false, false, true, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'm' code 109, 24/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, true, true, true, true, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'A' code 65, 26/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {true, false, false, false, false, false, true, false}, {true, true, false, false, false, true, true, false}, {true, false, true, false, true, false, true, false}, {true, false, false, true, false, false, true, false}, {true, false, false, true, false, false, true, false}, {true, false, false, false, false, false, true, false}, {true, false, false, false, false, false, true, false}, {true, false, false, false, false, false, true, false}, {true, false, false, false, false, false, true, false}, {true, false, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'M' code 77, 26/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, true, true, true, true, false, false}, {false, true, false, true, false, false, false, false}, {false, true, false, false, true, false, false, false}, {false, true, false, false, false, true, false, false}, {false, true, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'R' code 82, 26/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {true, false, false, false, false, false, true, false}, {true, false, false, false, false, false, true, false}, {true, false, false, false, false, false, true, false}, {true, false, false, false, false, false, true, false}, {true, false, false, false, false, false, true, false}, {true, false, false, true, false, false, true, false}, {true, false, false, true, false, false, true, false}, {true, false, true, false, true, false, true, false}, {true, true, false, false, false, true, true, false}, {true, false, false, false, false, false, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // 'W' code 87, 26/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, true, true, true, true, true, true, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, true, true, true, true, true, true, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, false, true, false, false, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '#' code 35, 28/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, true, true, true, true, false, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, true, true, false}, {false, true, false, false, true, false, true, false}, {false, true, false, true, false, false, true, false}, {false, true, true, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, true, false, false, false, false, true, false}, {false, false, true, true, true, true, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '0' code 48, 28/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, true, true, true, true, true, false, false}, {true, false, false, true, false, false, true, false}, {true, false, false, true, false, false, false, false}, {true, false, false, true, false, false, false, false}, {false, true, true, true, true, true, false, false}, {false, false, false, true, false, false, true, false}, {false, false, false, true, false, false, true, false}, {true, false, false, true, false, false, true, false}, {false, true, true, true, true, true, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, true, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '$' code 36, 33/128 px
+        {{false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, true, true, true, true, true, false, false}, {true, false, false, false, false, false, true, false}, {true, false, false, true, true, true, true, false}, {true, false, true, false, false, false, true, false}, {true, false, true, false, false, false, true, false}, {true, false, true, false, false, false, true, false}, {true, false, true, false, false, true, true, false}, {true, false, false, true, true, false, true, false}, {true, false, false, false, false, false, false, false}, {false, true, true, true, true, true, true, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}, {false, false, false, false, false, false, false, false}}, // '@' code 64, 36/128 px
+    };
+    
     float LX = -10; float LY = -10; float LZ = 10; float intensity = 1000; // lighing position
 
     float w1; float w2; float w3; 
@@ -136,6 +215,7 @@ class render extends Thread{
     float denom;
     float comz;
     float compens = 0;
+    float light_speed = 20;
 
     //   CAMERA VARIABLES ARE EDITED HERE ON RUN TIME
     void camedit(float fov, float zoom, float cam_x, float cam_y ,float cam_z, float d0 , float polar_angle,float azimuthal_angle){
@@ -174,18 +254,18 @@ class render extends Thread{
     ThreadPoolExecutor run2 = new ThreadPoolExecutor(16, 16, 0L, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(2000), new ThreadPoolExecutor.CallerRunsPolicy());
     
     //BASEMESH CLONE IS SENT WITH TRIANGLE COLOR FOR EACH TRIANGLE
-    void project(float tri[], int[] color){
-
+    int[] project(float tri[], int[] uv, float[][] state){
         Arrays.fill(zbuffer,Float.MAX_VALUE); // zbuffer is set to max value after each frame
         Arrays.fill(triangle_index, -1);// triangle index is set to -1 soo if a pixel doesnt have any trianlge corresponding to it that pixel can be skipped by checking its triangle index (-1 triangle index is not possible )
 
+
         rejection = 0;
-        float px;
-        float py;
-        float pz;
-        float px1;
-        float py1;
-        float pz1;
+        float rx , vx , px ; 
+        float ry , vy , py ; 
+        float rz , vz , pz ; 
+        float rx1, vx1, px1;
+        float ry1, vy1, py1;
+        float rz1, vz1, pz1;
         float sin1 = (float)Math.sin(-azimuthal_angle/2.0f);
         float sin2 = (float)Math.sin((1.570796f - polar_angle)/2.0f);
         float cos1 = (float)Math.cos(-azimuthal_angle/2.0f);
@@ -207,13 +287,46 @@ class render extends Thread{
             triangle[3*i + 2] = pz1*(1-2*(sin2*sin2)) - 2*px1*cos2*sin2;
         }
 
+        for (int i = 0; i < state.length; i++) {
+            px = state[i][0]- cam_x;
+            py = state[i][1]- cam_y;
+            pz = state[i][2]- cam_z;
+            vx = state[i][3];
+            vy = state[i][4];
+            vz = state[i][5];
+            rx = state[i][6];
+            ry = state[i][7];
+            rz = state[i][8];
+
+            px1 = px*(1-2*(sin1*sin1)) - 2*py*cos1*sin1;
+            py1 = py*(1-2*(sin1*sin1)) + 2*px*cos1*sin1; 
+            pz1 = pz;
+            vx1 = vx*(1-2*(sin1*sin1)) - 2*vy*cos1*sin1;
+            vy1 = vy*(1-2*(sin1*sin1)) + 2*vx*cos1*sin1; 
+            vz1 = vz;
+            rx1 = rx*(1-2*(sin1*sin1)) - 2*ry*cos1*sin1;
+            ry1 = ry*(1-2*(sin1*sin1)) + 2*rx*cos1*sin1; 
+            rz1 = rz;
+
+            normalized_state[i][0] = px1*(1-2*(sin2*sin2)) + 2*pz1*cos2*sin2;
+            normalized_state[i][1] = py1;
+            normalized_state[i][2] = pz1*(1-2*(sin2*sin2)) - 2*px1*cos2*sin2;
+            normalized_state[i][3] = vx1*(1-2*(sin2*sin2)) + 2*vz1*cos2*sin2;
+            normalized_state[i][4] = vy1;
+            normalized_state[i][5] = vz1*(1-2*(sin2*sin2)) - 2*vx1*cos2*sin2;
+            normalized_state[i][6] = rx1*(1-2*(sin2*sin2)) + 2*rz1*cos2*sin2;
+            normalized_state[i][7] = ry1;
+            normalized_state[i][8] = rz1*(1-2*(sin2*sin2)) - 2*rx1*cos2*sin2;
+            normalized_state[i][9] = state[i][6];
+        }
+
         // BACKFACE CULLING LOOP EACH TRIANGLE IS TAKEN AND IF ITS BEHIND THE CAMERA IT GETS REJECTED AND EACH TRIANGLE IS PRECULLED, CULLING IS TESTED BY CHECKING THE VECTOR AREA SIGN 
         for(int i = 0 ; i < tri_count ; i++){
             x1 = triangle[9*i]    ; y1 = triangle[9*i + 1]; z1 = triangle[9*i + 2]; 
             x2 = triangle[9*i + 3]; y2 = triangle[9*i + 4]; z2 = triangle[9*i + 5]; 
             x3 = triangle[9*i + 6]; y3 = triangle[9*i + 7]; z3 = triangle[9*i + 8]; 
             if(x1 < 1.05f || x2 < 1.05f || x3 < 1.05f) { // DISTANCE REJECTION
-                data[24*i +  23] = -1;
+                tri_isvisible[i] = false;
                 //rejection++;
                 continue;
                 
@@ -239,7 +352,7 @@ class render extends Thread{
                 float y_max = ((Math.max(xy1, Math.max(xy2,xy3)))); 
                 if (x_max < -1 || x_min > 1 || y_max < -1 || y_min > 1) { // IF TRIANGLES OUSIDE THE NDC PLANE ITS REJECTED 
                     //rejection++;
-                    data[24*i +  23] = -1;
+                    tri_isvisible[i] = false;
                     continue;
                 }
                 // AFTER PROJECTION AXIS ARE PERMULATED 3D SPACE Y - SCREEN X || 3D SPACE Z - SCREEN Y || 3D SPACE X - DEPTH
@@ -258,22 +371,23 @@ class render extends Thread{
                 data[24*i + 16] = y/mag; // 17 - 23 // NORMAL OF THE TRIANGLE IN NORMALIZED 3D SPACE
                 data[24*i + 17] = z/mag; // 18 - 24 // NORMAL OF THE TRIANGLE IN NORMALIZED 3D SPACE
 
-                data[i*24 + 18] = color[i]; //uv[6*i + 0]; //16
-                data[i*24 + 19] = 0; //uv[6*i + 1]; //17
-                data[i*24 + 20] = 0; //uv[6*i + 2]; //18
-                data[i*24 + 21] = 0; //uv[6*i + 3]; //19
-                data[i*24 + 22] = 0; //uv[6*i + 4]; //20
-                data[i*24 + 23] = 0; //uv[6*i + 5]; //21
+                data[i*24 + 18] = 0;//uv[6*i + 0]; // UV COORDINATES CORRESPONDING TO EACH VERTEX
+                data[i*24 + 19] = 0;//uv[6*i + 1]; // UV COORDINATES CORRESPONDING TO EACH VERTEX
+                data[i*24 + 20] = 0;//uv[6*i + 2]; // UV COORDINATES CORRESPONDING TO EACH VERTEX
+                data[i*24 + 21] = 0;//uv[6*i + 3]; // UV COORDINATES CORRESPONDING TO EACH VERTEX
+                data[i*24 + 22] = 0;//uv[6*i + 4]; // UV COORDINATES CORRESPONDING TO EACH VERTEX
+                data[i*24 + 23] = 0;//uv[6*i + 5]; // UV COORDINATES CORRESPONDING TO EACH VERTEX
+                tri_isvisible[i] = true;
             }else{
                 //rejection++;
-                data[24*i +  23] = -1;
+                tri_isvisible[i] = false;
             }
         }        
         for(int i = 0 ; i <16 ; i++){ //RESETING THE NUMBER OF TRIANGLE PERSENT IN EACH TILE BEFORE MULTITHREADED RASTERIZATION
             last_tri_index[i] = 0;
         }
         for(int i = 0 ; i < tri_count ; i++){ // ASSIGNING EACH TRIANGLE TO A TILE / TILES
-            if(data[24*i +  23] == -1) continue;
+            if(!tri_isvisible[i]) continue;
             float x_min = (float)((Math.min(data[i*24+0], Math.min(data[i*24+2],data[i*24+4])))); // CREATING BOUNDS
             float x_max = (float)((Math.max(data[i*24+0], Math.max(data[i*24+2],data[i*24+4])))); // CREATING BOUNDS
             float y_min = (float)((Math.min(data[i*24+1], Math.min(data[i*24+3],data[i*24+5])))); // CREATING BOUNDS
@@ -322,14 +436,61 @@ class render extends Thread{
 
         for(int i = 0; i < scanline; i++){
             final int a = i;
-            shade.add(() -> {mtr.run1(a); return null;});// SCANLINE SHADING OVER 4 THREADS N, N+1 , N+2 , N+3 pixel scan line for even load distribution
+            shade.add(() -> {mtr.run1(a,light_speed); return null;});// SCANLINE SHADING OVER 4 THREADS N, N+1 , N+2 , N+3 pixel scan line for even load distribution
         }
         try {
             List<Future<Void>> result1 = run1.invokeAll(shade);
             for(Future<Void> f : result1) f.get();                //WAITING FOR EACH THREAD TO COMPLETE 
         }catch (InterruptedException | ExecutionException e){
         }
-        
+
+        if(ASCIIeffect){
+            return ASCII_(image);
+        }
+        return image;
+    }
+    int[] ASCII_(int[] image){
+        int color;
+        Arrays.fill(processed_image, 0);
+        for(int ry = 0 ; ry < runy ; ry++){
+            for(int rx = 0; rx < runx ; rx ++){
+                int r = 0;
+                int g = 0;
+                int b = 0;
+                for(int py = ry * fontbity ; py < (ry + 1) * fontbity ; py++){
+                    for(int px = rx * fontbitx ; px < (rx + 1) * fontbitx ; px++){
+                        int argb = image[py * pixel_x + px];
+                        r += (argb >>> 16) & 0xFF;
+                        g += (argb >>> 8)  & 0xFF;
+                        b +=  argb         & 0xFF;
+                    }
+                }
+                r /= monospace_resolution;
+                g /= monospace_resolution;
+                b /= monospace_resolution;                
+                int lum = (r * 77 + g * 150 + b * 29) >> 10;
+
+                //int max = Math.max(r, Math.max(g, b));
+                //if(max>0){
+                //    r = r*brightness/max;
+                //    g = g*brightness/max;
+                //    b = b*brightness/max;
+                //}
+                color = 0xFF000000 | (r << 16) | (g << 8) | b;
+                
+                if(color == 0xFF000000) continue;
+                for(int py = 0 ; py < fontbity ; py++){
+                    for(int px = 0 ; px < fontbitx ; px++){
+                        if(FONT_BOOL[lum][py][px])
+                        //System.out.println(color);
+                        
+                        processed_image[(py+ry*fontbity) * pixel_x + rx*fontbitx + px] = color;
+                        
+                    }
+                }
+            }
+        }
+        return processed_image;
     }
     
     boolean bound(float x1, float y1, float x2, float y2, float x3, float y3){
@@ -352,17 +513,17 @@ class multithreadrender{
     final int pixel_y;
     final render r;
     float scaling;
+    int[][] texture;
 
-    public multithreadrender(render r, int pixel_x, int pixel_y){
+    public multithreadrender(render r, int pixel_x, int pixel_y, int[][] texture){
         this.r = r;
         this.pixel_x = pixel_x;
         this.pixel_y = pixel_y;
+        this.texture = texture;
         scaling = pixel_y/2.0f;
     }
-    
-    public void run1(int a){
+    public void run1(int a, float c){
         final float rh = 0.05f; final float ambient = 0.1f;
-        //int p = (a%2 == 0 ) ? 1 : 0;
         final float shininess = 2.0f/(rh*rh + 0.0001f) - 2.0f ;
         for(int pxy = a ; pxy < pixel_y ; pxy+=4){
             for(int pxx = 0 ; pxx < pixel_x ; pxx++){
@@ -388,10 +549,10 @@ class multithreadrender{
                 float W2 = (d11*d20 - d01*d21) / denom;
                 float W3 = (d00*d21 - d01*d20) / denom;
                 float W1 = 1.0f - W2 - W3;
-                float u1 = (W1*r.data[index*24+15] + W2*r.data[index*24+17] + W3*r.data[index*24+19]); // HAVE THE MAPPED PIXEL LOCATION OF THE TRIANGLE ON A UV TEXTURE AND USING THE CORRECT BAYCENTRIC CORDS ON THE UV COORDS WILL GIVE THE CORRECT PIXEL ON THE UV TEXTURE
-                float v1 = (W1*r.data[index*24+16] + W2*r.data[index*24+18] + W3*r.data[index*24+20]); // HAVE THE MAPPED PIXEL LOCATION OF THE TRIANGLE ON A UV TEXTURE AND USING THE CORRECT BAYCENTRIC CORDS ON THE UV COORDS WILL GIVE THE CORRECT PIXEL ON THE UV TEXTURE
-                int u = (int)u1; if (u < 0) u = 0; if (u > pixel_x - 1)  u = pixel_x-1; //clamping of uv texture
-                int v = (int)v1; if (v < 0) v = 0; if (v > pixel_y - 1)  v = pixel_y-1; //clamping of uv texture
+                float u1 = (W1*r.data[index*24+18] + W2*r.data[index*24+20] + W3*r.data[index*24+22]); // HAVE THE MAPPED PIXEL LOCATION OF THE TRIANGLE ON A UV TEXTURE AND USING THE CORRECT BAYCENTRIC CORDS ON THE UV COORDS WILL GIVE THE CORRECT PIXEL ON THE UV TEXTURE
+                float v1 = (W1*r.data[index*24+19] + W2*r.data[index*24+21] + W3*r.data[index*24+23]); // HAVE THE MAPPED PIXEL LOCATION OF THE TRIANGLE ON A UV TEXTURE AND USING THE CORRECT BAYCENTRIC CORDS ON THE UV COORDS WILL GIVE THE CORRECT PIXEL ON THE UV TEXTURE
+                int u = (int)u1; if (u < 0) u = 0; if (u > 64 - 1)  u = 64-1; //clamping of uv texture
+                int v = (int)v1; if (v < 0) v = 0; if (v > 48 - 1)  v = 48-1; //clamping of uv texture
 
                 float dot =  (PZ - r.LX)*r.data[index*24+15] + (PX - r.LY)*r.data[index*24+16] + (PY - r.LZ)*r.data[index*24+17]; //DOT PRODUCT BETWEEN MESH NORMAL VECTOR AND LIGHT RAY
                 float refx = (PZ - r.LX) - 2.0f*dot*r.data[index*24+15]; // VECTOR OF REFLECTED LIGHT BEAM FROM MESH SURFACE
@@ -404,11 +565,44 @@ class multithreadrender{
                 float atten = 1.0f / ( 1.0f + 0.01f*magr + 0.0001f*magr*magr); 
                 float diffuse = Math.max((-dot/magr) , 0.0f); 
                 float spec = (float)Math.pow(Math.max(reflection,0), shininess); 
+
+                float radx = (PZ - r.normalized_state[0][0]);
+                float rady = (PX - r.normalized_state[0][1]);
+                float radz = (PY - r.normalized_state[0][2]);
+                float surfvelox = (r.normalized_state[0][7] * radz - r.normalized_state[0][8] * rady + r.normalized_state[0][3]);
+                float surfveloy = (r.normalized_state[0][8] * radx - r.normalized_state[0][6] * radz + r.normalized_state[0][4]);
+                float surfveloz = (r.normalized_state[0][6] * rady - r.normalized_state[0][7] * radx + r.normalized_state[0][5]);
+                float relativesurfvelo = (surfvelox*PZ + surfveloy*PX + surfveloz*PY)/mag;
+                float v2 = (surfvelox*surfvelox + surfveloy*surfveloy + surfveloz*surfveloz) / (c*c);
+                v2 = Math.min(v2, 0.98f);
+                float gamma = 1.0f / (float)Math.sqrt(1.0f - v2);
+                float br = Math.max(-0.99f, Math.min(0.99f, relativesurfvelo / c));
+                float D = 1.0f / (gamma * (1.0f + br));
+
                 spec *= (1-rh)*0.8f + 0.2f;
-                int base = (int) r.data[index*24 + 18];
+                int base = (int) 0xFFFFFFFF;// texture[v][u];
                 int r1 = (int)Math.min(255, (((base >> 16) & 0xFF)*(ambient + diffuse*atten) + 255f * spec *atten)); //SHADING EFFECT ON EACH RGB CHANNEL
                 int g1 = (int)Math.min(255, (((base >>  8) & 0xFF)*(ambient + diffuse*atten) + 255f * spec *atten)); //SHADING EFFECT ON EACH RGB CHANNEL
                 int b1 = (int)Math.min(255, (( base        & 0xFF)*(ambient + diffuse*atten) + 255f * spec *atten)); //SHADING EFFECT ON EACH RGB CHANNEL
+                float t = (float)(Math.log(D) / Math.log(2)) * 3.0f;
+                t = Math.max(-1f, Math.min(1f, t));
+                float nr, ng, nb;
+                if (t > 0) {                 // blueshift
+                    nr = r1*(1-t);
+                    ng = g1*(1-t) + r1*t;
+                    nb = b1 + g1*t;
+                } else {                     // redshift
+                    float u11 = -t;
+                    nr = r1 + g1*u11;
+                    ng = g1*(1-u11) + b1*u11;
+                    nb = b1*(1-u11);
+                }
+                // relativistic beaming: approaching side brighter, receding side dimmer
+                float beam = D*D*D;
+                r1 = (int)Math.min(255, nr*beam);
+                g1 = (int)Math.min(255, ng*beam);
+                b1 = (int)Math.min(255, nb*beam);
+
                 r.image[pxy * pixel_x + pxx] = (r1 << 16) | (g1 << 8) | b1; // PUTTING THE RGB ON THE FINAL IMAGE
             }
         }
@@ -416,7 +610,7 @@ class multithreadrender{
     void chunk_rasterization(int pixel_x_st, int pixel_y_st, int pixel_x_ed, int pixel_y_ed, int chunk_index, int last_tri_index){
         for(int i = 0 ; i < last_tri_index ; i++){
             int index = r.tri_chunk_index[chunk_index][i];
-            if(r.data[24*index +  23] == -1) continue;
+            if(!r.tri_isvisible[index]) continue;
             float x1 = r.data[index*24+0] * scaling + pixel_x/2.0f; float y1 = r.data[index*24+1] * scaling + pixel_y/2.0f; float z1 = r.data[index*24+12];
             float x2 = r.data[index*24+2] * scaling + pixel_x/2.0f; float y2 = r.data[index*24+3] * scaling + pixel_y/2.0f; float z2 = r.data[index*24+13];
             float x3 = r.data[index*24+4] * scaling + pixel_x/2.0f; float y3 = r.data[index*24+5] * scaling + pixel_y/2.0f; float z3 = r.data[index*24+14];
@@ -449,11 +643,11 @@ class multithreadrender{
         }
     }
 }
+
 class viewer extends JPanel {
-    environment env;
-    control ctrl;
-    environment1 env1;
     float difficulty = 0.2f;
+    
+    render r;
     final int w, h, scale;
     final BufferedImage img;
     private final int[] dst;    // img's own pixel array
@@ -469,13 +663,13 @@ class viewer extends JPanel {
         bind("X", () -> { flipX = !flipX; redraw(); });
         bind("Y", () -> { flipY = !flipY; redraw(); });
         bind("S", () -> save("frame.png"));
-        bind("R", () -> {env1.reset(difficulty);
-            ctrl.initial = true; ctrl.initial_note_boolean = true;
-            ctrl.drive = true; ctrl.hook = false; ctrl.relief = false;
-            ctrl.current = 0;  ctrl.dhrcyclecount = 0;
-                });
-        bind("P", () -> {difficulty+=.2f; System.out.println(difficulty);});
-        bind("M", () -> {difficulty-=.2f; System.out.println(difficulty);});
+        bind("E", () -> {r.ASCIIeffect = !r.ASCIIeffect;});
+        bind("P", () -> {r.light_speed+=0.03f; System.out.println(r.light_speed);});
+        bind("M", () -> {r.light_speed-=0.03f; System.out.println(r.light_speed);});
+        bind("Z", () -> {r.view_fac+=0.1f;});
+        bind("A", () -> {r.view_fac-=0.1f;});
+
+
         JFrame f = new JFrame(title);
         f.add(this);
         f.pack();
@@ -554,256 +748,80 @@ class MeshLoader { // loads mesh from the same folder
         }
         return base_mesh;
     }
-}
-class environment{
-    double M;
-    double m;
-    double L;
-    double xdd;
-    double xd;
-    double x;
-    double thetadd;
-    double thetad;
-    double theta;
-    double g = 9.7905;
-    double x_max;
-    boolean noise_sw;
-    double noise;
-    String ANSI_RED = "\u001B[31m";
-    String ANSI_RESET = "\u001B[0m";
-    String ANSI_GREEN = "\033[32m";
-    public environment(double mass_cart, double mass_rod, double length_rod, double initial_cart_acceleration, double initial_cart_velocity, double initial_cart_position, double initial_rod_angular_acceleration, double initial_rod_angular_velocity, double initial_rod_theta, double max_cart_displacement, double noise_fc){
-        M = mass_cart; m = mass_rod; L = length_rod;
-        xdd = initial_cart_acceleration; xd = initial_cart_velocity; x = initial_cart_position;
-        thetadd = initial_rod_angular_acceleration; thetad = initial_rod_angular_velocity; theta = initial_rod_theta;
-        x_max = max_cart_displacement; noise = noise_fc; noise_sw = true;
-    }
-    public environment(double mass_cart, double mass_rod, double length_rod, double initial_cart_acceleration, double initial_cart_velocity, double initial_cart_position, double initial_rod_angular_acceleration, double initial_rod_angular_velocity, double initial_rod_theta, double max_cart_displacement){
-        M = mass_cart; m = mass_rod; L = length_rod;
-        xdd = initial_cart_acceleration; xd = initial_cart_velocity; x = initial_cart_position;
-        thetadd = initial_rod_angular_acceleration; thetad = initial_rod_angular_velocity; theta = initial_rod_theta;
-        x_max = max_cart_displacement; noise_sw = false;
-    }
-    public environment(String defaultconfig){
-        M = 1; m = 1; L = 1.5;
-        xdd = 0; xd = 0.1; x = 0;
-        thetadd = 0; thetad = 0.1; theta = Math.toRadians(0);
-        x_max = 2; noise_sw = false;
-    }
-
-    void print(double dt, double force, boolean method){
-        System.out.print("time(ms): " + dt + " | force: " + force + " | xdd: " + xdd + " | xd: " + xd + " | x: " + x + " | thetadd: " + thetadd + " | thetad: " + thetad + " | theta: " + theta);
-        if(method){
-            System.out.println(" Method: lqr");
-        }else{
-            System.out.println(" Method: Swingup");
-        }
-    }
-    void printnn(double dt, double force){
-        System.out.println("time(ms): " + dt + " | force: " + force + " | xdd: " + xdd + " | xd: " + xd + " | x: " + x + " | thetadd: " + thetadd + " | thetad: " + thetad + " | theta: " + theta);
-    }
-    private void calc(double x1, double xd1, double theta1, double thetad1, double force){
-        double a1 = m + M;
-        double b1 = m*L*Math.cos(theta1)/2;
-        double c1 = -((m*L*thetad1*thetad1*Math.sin(theta1)/2) + force);
-        double a2 = m*L*Math.cos(theta1)/2;
-        double b2 = m*L*L/3;
-        double c2 = m*L*g*Math.sin(theta1)/2;
-        double denom = a1*b2 - a2*b1;
-        xdd = (b1*c2 - b2*c1)/denom;
-        thetadd = (c1*a2 - c2*a1)/denom;
-    }
-
-    void reset(float difficulty){
-        x = (Math.random() * 2*difficulty - difficulty);
-        xd = (Math.random() * difficulty - difficulty/2);
-        theta = (Math.random() * 2*difficulty - difficulty);
-        thetad = (Math.random() * 2*difficulty - difficulty);
-        xdd = 0;
-        thetadd = 0;
-    }
-    void resetpi(float difficulty){ // difficuily shuldnt be over 0.45 itll goo ut of lqr catch range :3
-        x = (Math.random() * 2*2.5 - 2.5);
-        xd = (Math.random() * difficulty - difficulty/2);
-        theta = (Math.random() * 2*difficulty - difficulty) + 3.14;
-        thetad = (Math.random() * 2*difficulty - difficulty);
-        xdd = 0;
-        thetadd = 0;
-    }
-
-    void rk4(double force, double dt){
-        if(x > 3){
-            force = 0;
-            if(xd>0) xd = 0;
-        }
-        if(x < -3){
-            force = 0;
-            if(xd<0) xd = 0;
-        }
-        double       x1 = x;
-        double      xd1 = xd;
-        double   theta1 = theta;
-        double  thetad1 = thetad;
-        calc(x1, xd1, theta1, thetad1, force);
-        double     xdd1 = xdd;
-        double thetadd1 = thetadd;
-
-        double       x2 = x +           xd1*(dt/2);
-        double      xd2 = xd +         xdd1*(dt/2);
-        double   theta2 = theta +   thetad1*(dt/2);
-        double  thetad2 = thetad + thetadd1*(dt/2);
-        calc(x2, xd2, theta2, thetad2, force);
-        double     xdd2 = xdd;
-        double thetadd2 = thetadd;
-
-        double       x3 = x +           xd2*(dt/2);
-        double      xd3 = xd +         xdd2*(dt/2);
-        double   theta3 = theta +   thetad2*(dt/2);
-        double  thetad3 = thetad + thetadd2*(dt/2);
-        calc(x3, xd3, theta3, thetad3, force);
-        double     xdd3 = xdd;
-        double thetadd3 = thetadd;
-
-        double       x4 = x +           xd3*(dt);
-        double      xd4 = xd +         xdd3*(dt);
-        double   theta4 = theta +   thetad3*(dt);
-        double  thetad4 = thetad + thetadd3*(dt);
-        calc(x4, xd4, theta4, thetad4, force);
-        double     xdd4 = xdd;
-        double thetadd4 = thetadd;
-
-        x      += (dt/6.0)*(xd1 + 2*xd2 + 2*xd3 + xd4);
-        xd     += (dt/6.0)*(xdd1 + 2*xdd2 + 2*xdd3 + xdd4);
-        theta  += (dt/6.0)*(thetad1 + 2*thetad2 + 2*thetad3 + thetad4);
-        thetad += (dt/6.0)*(thetadd1 + 2*thetadd2 + 2*thetadd3 + thetadd4);
-    }
-}
-class control{
-    double M;
-    double m;
-    double L;
-    double g=9.7905;
-    double K1,K2,K3,K4;
-    double threshold = 0.4;
-    double catchThreshold = Math.toRadians(45);
-    double maxForce = 30;
-    boolean method = false;
-
-    double brkdistance = 0.45;
-    double brkc = 20;
-    double accc = 12.2;
-    boolean initial = true;
-    double target;
-    double idkwhat = 0.15;
-    double vdanger = 9.5;
-    double swingdistance = 0.75;
-    int wait = 100; //millisec, this gud shi
-    int current = 0;
-    double dhrcyclecount = 0;
-    double xinitial;
-    boolean initial_note_boolean = true;
-
-    boolean drive = true;
-    boolean hook = false;
-    boolean relief = false;
-
-    double Max_length = 2; //aka +-2 this is just to trick the controller it always misbehaves its actually +-3
-    public control(double Mass, double mass, double Length, double k1, double k2, double k3, double k4)throws Exception{
-        this.M = Mass;
-        this.m = mass;
-        this.L = Length;
-        this.K1 = k1;
-        this.K2 = k2;
-        this.K3 = k3;
-        this.K4 = k4;
-    }
-    public double computeControl(double x, double xd, double theta, double thetad) {
-        method = true;
-        double error = theta - Math.PI;
-        error = Math.atan2(Math.sin(error), Math.cos(error));
-        double lqrForce = -(K1 * x + K2 * xd + K3 * error + K4 * thetad);
-        if (Math.abs(error) < threshold) {
-            return Math.max(-maxForce, Math.min(maxForce, lqrForce));
-        }
-        if (Math.abs(error) < catchThreshold) {
-            double catchForce = -(K3 * error + K4 * thetad);
-            return Math.max(-maxForce, Math.min(maxForce, catchForce));
-        }
-        method = false;
-        return swingUpController(x, xd, theta, thetad, error); 
-    }
-
-    private double swingUpController(double x, double xd, double theta, double thetad, double err) {
-        if (initial) {
-            
-            if (theta * thetad > 0) {
-                if (thetad > 0) {
-                    target = -swingdistance * Max_length;
-                } else {
-                    target = swingdistance * Max_length;
-                }
-                initial_note_boolean = true; 
-                initial = false;
-                hook = false;
-                drive = true;
-                relief = false;
-            } else {
-                if (initial_note_boolean) {
-                    xinitial = x;
-                    initial_note_boolean = false;
-                }
-                target = xinitial;
-                hold_lqr(target, x, xd);
+    public static int[] loadColors(String filePath) {
+        ArrayList<Integer> temp = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                temp.add(Integer.parseInt(line)); // signed ARGB, e.g. -16777216 = 0xFF000000
             }
+        } catch (IOException e) {
+            System.err.println("Error reading color file: " + e.getMessage());
         }
-        if (drive) {
-            if (Math.abs(target - x) < idkwhat) {
-                drive = false;
-                hook = true;
-                relief = false;
-            }
-            return driveforce(target, x, xd);
-        }
-        if (hook) {
-            double sign = Math.signum(x);
-            if (sign * thetad < 0) {
-                hook = false;
-                drive = false;
-                relief = true;
-                current = 0;
-            }
-            return hold_lqr(target, x, xd);
-        }
-        if (relief) {
-            double sign = Math.signum(x);
-            if(current == wait){
-                hook = false;
-                drive = true;
-                relief = false;
-                dhrcyclecount ++;
-                target = -(sign) * Max_length * swingdistance;
-            }
-            current++;
-            return hold_lqr(target, x, xd);
-        }
-        return 0.0; 
+        int[] colors = new int[temp.size()];
+        for (int i = 0; i < colors.length; i++) colors[i] = temp.get(i);
+        return colors;
     }
-    private double hold_lqr(double target, double x, double xd) {
-        double KK1 = 80.06;
-        double KK2 = 81.06; 
-        return Math.max(-maxForce, Math.min(maxForce, -((x - target) * KK1 + xd * KK2)));
+    float[] load_default_mesh(float a){
+        float h = a/2.0f;
+        return  new float[]{-h,-h, h,  h,-h, h,  h, h, h,  -h,-h, h,  h, h, h,  -h, h, h,   h,-h,-h, -h,-h,-h, -h, h,-h,   h,-h,-h, -h, h,-h,  h, h,-h,   h,-h, h,  h,-h,-h,  h, h,-h,   h,-h, h,  h, h,-h,  h, h, h,  -h,-h,-h, -h,-h, h, -h, h, h,  -h,-h,-h, -h, h, h, -h, h,-h,  -h, h, h,  h, h, h,  h, h,-h,  -h, h, h,  h, h,-h, -h, h,-h,  -h,-h,-h,  h,-h,-h,  h,-h, h,  -h,-h,-h,  h,-h, h, -h,-h, h,};
     }
+    int[] load_default_uv(){
+        return new int[]  {63, 31,    48, 31,   48, 16,   63, 31,    48, 16,   63, 16,     31, 31,  16, 31,   16, 16,     31, 31,  16, 16,    31, 16,    47, 31,   32, 31,   32, 16,    47, 31,   32, 16,   47, 16,   15, 31,   0, 31,    0, 16,     15, 31,   0, 16,    15, 16,    16, 0,     31, 0,    31, 15,   16, 0,     31, 15,   16, 15,   16, 32,    31, 32,   31, 47,   16, 32,    31, 47,  16, 47   };
 
-    private double driveforce(double target, double x, double xd) {
-        double xerr = target - x;
-
-        if (Math.abs(xerr) < brkdistance){
-            return Math.max(-maxForce, Math.min(maxForce, -xd * brkc));
-        } 
-        if(Math.abs(xerr) > brkdistance && Math.abs(xd) < vdanger ){
-            return Math.max(-maxForce, Math.min(maxForce, accc * (target - x)));
-        }
-        return 0.0;
     }
-
+    int[][] load_default_texture(){
+        return new int[][] {
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF189B3B, 0xFF168533, 0xFF178A35, 0xFF168132, 0xFF189B3B, 0xFF168433, 0xFF189B3B, 0xFF168935, 0xFF168935, 0xFF189339, 0xFF189B3B, 0xFF189339, 0xFF19A23D, 0xFF14782F, 0xFF189339, 0xFF168935, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF189B3B, 0xFF168132, 0xFF189B3B, 0xFF168533, 0xFF19A23D, 0xFF593D29, 0xFF189B3B, 0xFF14782F, 0xFF19A13D, 0xFF178A35, 0xFF189B3B, 0xFF168734, 0xFF189A3B, 0xFF168233, 0xFF189B3B, 0xFF158132, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF178B35, 0xFF593D29, 0xFF19A23D, 0xFF157A30, 0xFF189B3B, 0xFF593D29, 0xFF168533, 0xFF593D29, 0xFF189B3B, 0xFF189339, 0xFF178A35, 0xFF19A03D, 0xFF593D29, 0xFF146F2C, 0xFF178A35, 0xFF593D29, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF593D29, 0xFF6C6C6C, 0xFF593D29, 0xFF593D29, 0xFF168734, 0xFF593D29, 0xFF593D29, 0xFF593D29, 0xFF14762F, 0xFF593D29, 0xFF168233, 0xFF593D29, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF593D29, 0xFF6C6C6C, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF878787, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF593D29, 0xFFB9855C, 0xFFB9855C, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF878787, 0xFF79553A, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF6C6C6C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF3F48CC, 0xFF3F48CC, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF745844, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF593D29, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF3F48CC, 0xFF3F48CC, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF3F48CC, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF3F48CC, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF878787, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF168935, 0xFF158132, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF593D29, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFFB9855C, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF158132, 0xFF168935, 0xFF4E772A, 0xFF679D38, 0xFF4E762A, 0xFF476C26, 0xFF476C26, 0xFF4C7329, 0xFF436624, 0xFF4A7128, 0xFF547F2D, 0xFF4F792B, 0xFF496F28, 0xFF476D27, 0xFF496E27, 0xFF588630, 0xFF3B5A20, 0xFF4B7128 },
+            { 0xFF189339, 0xFF189B3B, 0xFF178A35, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF878787, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF878787, 0xFF593D29, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF878787, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF178A35, 0xFF189B3B, 0xFF189339, 0xFF4F782B, 0xFF4A7128, 0xFF55812E, 0xFF50792B, 0xFF517B2C, 0xFF446725, 0xFF517B2C, 0xFF456925, 0xFF436624, 0xFF598830, 0xFF588530, 0xFF4E762A, 0xFF679D38, 0xFF4A7128, 0xFF476D27, 0xFF4A7028 },
+            { 0xFF14782F, 0xFF168233, 0xFF146F2C, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF146F2C, 0xFF168233, 0xFF14782F, 0xFF56832F, 0xFF4B7128, 0xFF426424, 0xFF466A26, 0xFF496E27, 0xFF486D27, 0xFF4C7429, 0xFF4C7429, 0xFF4E772A, 0xFF54802E, 0xFF598730, 0xFF5C8B32, 0xFF476D27, 0xFF3F6022, 0xFF446725, 0xFF609234 },
+            { 0xFF19A23D, 0xFF189A3B, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF6C6C6C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF189A3B, 0xFF19A23D, 0xFF3E5F22, 0xFF466B26, 0xFF496F28, 0xFF50792B, 0xFF4D752A, 0xFF517B2C, 0xFF426424, 0xFF4D752A, 0xFF436624, 0xFF456926, 0xFF4B7128, 0xFF50792B, 0xFF4C7329, 0xFF4A7028, 0xFF588630, 0xFF426424 },
+            { 0xFF189339, 0xFF168734, 0xFF19A03D, 0xFF593D29, 0xFF6C6C6C, 0xFF593D29, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF6C6C6C, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF593D29, 0xFF6C6C6C, 0xFF593D29, 0xFF19A03D, 0xFF168734, 0xFF189339, 0xFF56822E, 0xFF456926, 0xFF5C8B32, 0xFF456926, 0xFF5B8A31, 0xFF5C8C32, 0xFF486D27, 0xFF5B8A31, 0xFF629635, 0xFF3E5E21, 0xFF446725, 0xFF588630, 0xFF5B8931, 0xFF436524, 0xFF486D27, 0xFF4B7128 },
+            { 0xFF189B3B, 0xFF189B3B, 0xFF178A35, 0xFF168233, 0xFF593D29, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF593D29, 0xFF168233, 0xFF178A35, 0xFF189B3B, 0xFF189B3B, 0xFF517B2C, 0xFF507A2C, 0xFF406022, 0xFF588530, 0xFF446825, 0xFF4F792B, 0xFF4F782B, 0xFF527D2C, 0xFF476D27, 0xFF4F782B, 0xFF486D27, 0xFF456926, 0xFF406022, 0xFF486D27, 0xFF4B7229, 0xFF4E772A },
+            { 0xFF189339, 0xFF178A35, 0xFF189339, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF878787, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF189339, 0xFF178A35, 0xFF189339, 0xFF436524, 0xFF537D2D, 0xFF57852F, 0xFF4C7429, 0xFF4D752A, 0xFF456926, 0xFF496F28, 0xFF436624, 0xFF466A26, 0xFF476D27, 0xFF609234, 0xFF5B8A31, 0xFF4D752A, 0xFF588630, 0xFF50792B, 0xFF4C7329 },
+            { 0xFF168935, 0xFF19A13D, 0xFF189B3B, 0xFF14762F, 0xFF593D29, 0xFF593D29, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF6C6C6C, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF6C6C6C, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF593D29, 0xFF593D29, 0xFF14762F, 0xFF189B3B, 0xFF19A13D, 0xFF168935, 0xFF4C7329, 0xFF476D27, 0xFF537E2D, 0xFF4A7028, 0xFF4C7429, 0xFF426423, 0xFF57842F, 0xFF466A26, 0xFF50792B, 0xFF5C8B32, 0xFF476D27, 0xFF446825, 0xFF4C7329, 0xFF55812E, 0xFF436624, 0xFF598830 },
+            { 0xFF168935, 0xFF14782F, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFFB9855C, 0xFF593D29, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF14782F, 0xFF168935, 0xFF588630, 0xFF527D2C, 0xFF609234, 0xFF5A8931, 0xFF5B8A31, 0xFF446825, 0xFF5C8B32, 0xFF537D2D, 0xFF5F9033, 0xFF5A8931, 0xFF456925, 0xFF4D752A, 0xFF466B26, 0xFF4E762A, 0xFF547F2D, 0xFF436524 },
+            { 0xFF189B3B, 0xFF189B3B, 0xFF168533, 0xFF593D29, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFF878787, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF878787, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFFB9855C, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF593D29, 0xFF168533, 0xFF189B3B, 0xFF189B3B, 0xFF50792B, 0xFF456925, 0xFF619334, 0xFF4B7128, 0xFF4A7128, 0xFF507A2C, 0xFF5A8931, 0xFF446725, 0xFF476D27, 0xFF4D752A, 0xFF4D752A, 0xFF598830, 0xFF4B7229, 0xFF5F9033, 0xFF4C7329, 0xFF446825 },
+            { 0xFF168433, 0xFF593D29, 0xFF593D29, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF593D29, 0xFFB9855C, 0xFFB9855C, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF878787, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF593D29, 0xFF593D29, 0xFF593D29, 0xFF168433, 0xFF527D2C, 0xFF547F2D, 0xFF50792B, 0xFF57852F, 0xFF456925, 0xFF609234, 0xFF4B7229, 0xFF4E762A, 0xFF669A37, 0xFF406123, 0xFF588630, 0xFF456926, 0xFF4C7329, 0xFF486D27, 0xFF50792B, 0xFF4C7329 },
+            { 0xFF189B3B, 0xFF19A23D, 0xFF189B3B, 0xFF168734, 0xFF593D29, 0xFF79553A, 0xFF878787, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF745844, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF6C6C6C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF745844, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF878787, 0xFF79553A, 0xFF593D29, 0xFF168734, 0xFF189B3B, 0xFF19A23D, 0xFF189B3B, 0xFF466A26, 0xFF5C8B32, 0xFF476C26, 0xFF56832F, 0xFF50792B, 0xFF466A26, 0xFF4D752A, 0xFF496E27, 0xFF50792B, 0xFF4D752A, 0xFF4A7128, 0xFF416323, 0xFF5F9033, 0xFF436624, 0xFF426424, 0xFF496F28 },
+            { 0xFF168132, 0xFF168533, 0xFF157A30, 0xFF593D29, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF593D29, 0xFF157A30, 0xFF168533, 0xFF168132, 0xFF629635, 0xFF50792B, 0xFF446825, 0xFF496F28, 0xFF517B2C, 0xFF4D752A, 0xFF466B26, 0xFF416223, 0xFF496F28, 0xFF4D752A, 0xFF496F28, 0xFF426424, 0xFF54802E, 0xFF57852F, 0xFF406123, 0xFF50792B },
+            { 0xFF178A35, 0xFF189B3B, 0xFF19A23D, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF745844, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF593D29, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF593D29, 0xFF19A23D, 0xFF189B3B, 0xFF178A35, 0xFF446825, 0xFF598730, 0xFF3E5F22, 0xFF4D752A, 0xFF426424, 0xFF517B2C, 0xFF446825, 0xFF679D38, 0xFF55812E, 0xFF4E762A, 0xFF598730, 0xFF527D2C, 0xFF55812E, 0xFF486D27, 0xFF598730, 0xFF5C8C32 },
+            { 0xFF168533, 0xFF168132, 0xFF593D29, 0xFF6C6C6C, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF6C6C6C, 0xFF593D29, 0xFF168132, 0xFF168533, 0xFF56832F, 0xFF55812E, 0xFF669A37, 0xFF416323, 0xFF5F9033, 0xFF5B8931, 0xFF4E772A, 0xFF4E762A, 0xFF436524, 0xFF4F782B, 0xFF4F782B, 0xFF476D27, 0xFF598830, 0xFF537E2D, 0xFF4A7028, 0xFF406123 },
+            { 0xFF189B3B, 0xFF189B3B, 0xFF178B35, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF878787, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF178B35, 0xFF189B3B, 0xFF189B3B, 0xFF466B26, 0xFF4F792B, 0xFF486D27, 0xFF496E27, 0xFF57842F, 0xFF507A2C, 0xFF4E772A, 0xFF4E762A, 0xFF4B7229, 0xFF659A37, 0xFF426423, 0xFF598830, 0xFF466A26, 0xFF4C7429, 0xFF486D27, 0xFF547F2D },
+            { 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF878787, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E },
+            { 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFF22B14C, 0xFFED1C24, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFED1C24, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFA349A4, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E, 0xFFFFC90E },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF745844, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFB9855C, 0xFF593D29, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF6C6C6C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFFB9855C, 0xFF966C4A, 0xFF593D29, 0xFFB9855C, 0xFFB9855C, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF878787, 0xFF79553A, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF966C4A, 0xFF966C4A, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFFB9855C, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFF878787, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFFB9855C, 0xFFB9855C, 0xFF79553A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF79553A, 0xFF593D29, 0xFF966C4A, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF79553A, 0xFF79553A, 0xFF79553A, 0xFFB9855C, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF966C4A, 0xFF79553A, 0xFF966C4A, 0xFFB9855C, 0xFF593D29, 0xFF966C4A, 0xFF79553A, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF593D29, 0xFF6C6C6C, 0xFF79553A, 0xFF966C4A, 0xFF593D29, 0xFF79553A, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF593D29, 0xFF6C6C6C, 0xFF593D29, 0xFF593D29, 0xFF168734, 0xFF593D29, 0xFF593D29, 0xFF593D29, 0xFF14762F, 0xFF593D29, 0xFF168233, 0xFF593D29, 0xFF79553A, 0xFF593D29, 0xFF593D29, 0xFF79553A, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF178B35, 0xFF593D29, 0xFF19A23D, 0xFF157A30, 0xFF189B3B, 0xFF593D29, 0xFF168533, 0xFF593D29, 0xFF189B3B, 0xFF189339, 0xFF178A35, 0xFF19A03D, 0xFF593D29, 0xFF146F2C, 0xFF178A35, 0xFF593D29, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF189B3B, 0xFF168132, 0xFF189B3B, 0xFF168533, 0xFF19A23D, 0xFF593D29, 0xFF189B3B, 0xFF14782F, 0xFF19A13D, 0xFF178A35, 0xFF189B3B, 0xFF168734, 0xFF189A3B, 0xFF168233, 0xFF189B3B, 0xFF158132, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 },
+            { 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFED1C24, 0xFFED1C24, 0xFF189B3B, 0xFF168533, 0xFF178A35, 0xFF168132, 0xFF189B3B, 0xFF168433, 0xFF189B3B, 0xFF168935, 0xFF168935, 0xFF189339, 0xFF189B3B, 0xFF189339, 0xFF19A23D, 0xFF14782F, 0xFF189339, 0xFF168935, 0xFFED1C24, 0xFFED1C24, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000 }
+        };
+    }
 }
